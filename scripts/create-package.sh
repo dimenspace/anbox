@@ -1,12 +1,16 @@
 #!/bin/bash
 
+. build/envsetup.sh
+
+out_dir=`get_build_var PRODUCT_OUT`
+
 set -ex
 
-ramdisk=$1
-system=$2
+system=$out_dir/system.img
 
-if [ -z "$ramdisk" ] || [ -z "$system" ]; then
-	echo "Usage: $0 <ramdisk> <system image>"
+if [ ! -f "$system" ]; then
+    echo "Can't find $system file..."
+    echo "Please check your build environment."
 	exit 1
 fi
 
@@ -14,9 +18,6 @@ workdir=`mktemp -d`
 rootfs=$workdir/rootfs
 
 mkdir -p $rootfs
-
-# Extract ramdisk and preserve ownership of files
-#(cd $rootfs ; cat $ramdisk | gzip -d | sudo cpio -i)
 
 mkdir $workdir/system
 sudo mount -o loop,ro $system $workdir/system
@@ -26,7 +27,6 @@ sudo umount $workdir/system
 
 #apex process. binary and lib link to com.android.runtime, but real path has suffix with debug.
 #It handled in apexd, so hard cording about it
-
 for lib in libc libdl libm
 do
     sudo rm $rootfs/system/lib/$lib.so
@@ -47,7 +47,7 @@ sudo rm $rootfs/system/bin/linker_asan64
 sudo cp -ar $rootfs/system/apex/com.android.runtime.debug/bin/linker $rootfs/system/bin/linker_asan
 sudo cp -ar $rootfs/system/apex/com.android.runtime.debug/bin/linker64 $rootfs/system/bin/liner_asan64
 
-gcc -o $workdir/uidmapshift external/nsexec/uidmapshift.c
+gcc -o $workdir/uidmapshift vendor/anbox/external/nsexec/uidmapshift.c
 sudo $workdir/uidmapshift -b $rootfs 0 100000 65536
 
 # FIXME
