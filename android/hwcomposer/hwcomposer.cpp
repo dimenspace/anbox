@@ -22,12 +22,15 @@
 #include <vector>
 #include <algorithm>
 #include <string>
+#include <errno.h>
 
 #define LOG_NDEBUG 1
 #include <cutils/log.h>
 
 #include "HostConnection.h"
 #include "gralloc_cb.h"
+
+#include <android-base/properties.h>
 
 #define DEFINE_HOST_CONNECTION() \
     HostConnection *hostCon = HostConnection::get(); \
@@ -146,6 +149,10 @@ static void check_sync_fds(size_t numDisplays, hwc_display_contents_1_t** displa
     unsigned int i, j;
     for (i = 0; i < numDisplays; i++) {
         hwc_display_contents_1_t* list = displays[i];
+        if(list == 0) {
+            continue;
+        }
+
         if (list->retireFenceFd >= 0) {
             ALOGW("retireFenceFd[%u] was %d", i, list->retireFenceFd);
             list->retireFenceFd = -1;
@@ -192,6 +199,11 @@ static int hwc_set(hwc_composer_device_1_t* dev, size_t numDisplays,
         if (!cb_handle_t::validate(cb)) {
             ALOGE("Buffer handle is invalid\n");
             return -EINVAL;
+        }
+        if(layer->compositionType == HWC_FRAMEBUFFER_TARGET) {
+            std::string layer_name_temp = android::base::GetProperty("anbox.layer_name", "");
+            std::string layer_name = layer_name_temp.substr(0, layer_name_temp.find('#'));
+            strncpy(layer->name, layer_name.c_str(), layer_name.size());
         }
 
         rcEnc->rcPostLayer(rcEnc,
@@ -298,7 +310,7 @@ static int hwc_device_open(const hw_module_t* module, const char* name, hw_devic
 
     auto dev = new HwcContext;
     dev->device.common.tag = HARDWARE_DEVICE_TAG;
-    dev->device.common.version = HWC_DEVICE_API_VERSION_1_0;
+    dev->device.common.version = HWC_DEVICE_API_VERSION_1_1;
     dev->device.common.module = const_cast<hw_module_t*>(module);
     dev->device.common.close = hwc_device_close;
     dev->device.prepare = hwc_prepare;
@@ -324,7 +336,7 @@ hwc_module_t HAL_MODULE_INFO_SYM = {
     .common = {
         .tag = HARDWARE_MODULE_TAG,
         .version_major = 1,
-        .version_minor = 0,
+        .version_minor = 1,
         .id = HWC_HARDWARE_MODULE_ID,
         .name = "Hardware Composer Module",
         .author = "Anbox Developers",
