@@ -35,7 +35,7 @@
 
 #include <cutils/properties.h>
 #include <unistd.h>
-#include <hardware/qemud.h>
+#include <qemud.h>
 
 /* Name of the qemud service we want to connect to.
  */

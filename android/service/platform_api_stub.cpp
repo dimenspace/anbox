@@ -128,7 +128,7 @@ void PlatformApiStub::set_clipboard_data(const ClipboardData &data) {
     }
 
     rpc_channel_->call_method("set_clipboard_data", &message, c->response.get(),
-                              google::protobuf::NewCallback(
+                              google::protobuf::internal::NewCallback(
                                   this, &PlatformApiStub::on_clipboard_data_set, c.get()));
 
     c->wh.wait_for_all();
@@ -153,7 +153,7 @@ PlatformApiStub::ClipboardData PlatformApiStub::get_clipboard_data() {
     }
 
     rpc_channel_->call_method("get_clipboard_data", &message, c->response.get(),
-                              google::protobuf::NewCallback(
+                              google::protobuf::internal::NewCallback(
                                   this, &PlatformApiStub::on_clipboard_data_get, c.get()));
 
     c->wh.wait_for_all();

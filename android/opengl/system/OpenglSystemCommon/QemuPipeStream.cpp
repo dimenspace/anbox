@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 #include "QemuPipeStream.h"
-#include <hardware/qemu_pipe.h>
+#include <qemu_pipe.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>

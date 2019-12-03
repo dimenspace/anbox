@@ -19,7 +19,11 @@
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <GLES/gl.h>
-#include <system/window.h>
+
+#include <hardware/hardware.h>
+#include <hardware/gralloc.h>
+
+#include <nativebase/nativebase.h>
 
 struct EGLImage_t
 {

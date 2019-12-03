@@ -75,10 +75,10 @@ void AndroidApiSkeleton::launch_application(anbox::protobuf::bridge::LaunchAppli
         "start",
     };
 
-    if (request->has_stack()) {
-      argv.push_back("--stack");
-      argv.push_back(std::to_string(request->stack()));
-    }
+//    if (request->has_stack()) {
+//      argv.push_back("--stack");
+//      argv.push_back(std::to_string(request->stack()));
+//    }
 
     if (request->has_launch_bounds()) {
         argv.push_back("--launch-bounds");
@@ -90,10 +90,14 @@ void AndroidApiSkeleton::launch_application(anbox::protobuf::bridge::LaunchAppli
         argv.push_back(launch_bounds.str());
     }
 
-    if (intent.has_action()) {
+//    if (intent.has_action()) {
         argv.push_back("-a");
-        argv.push_back(intent.action());
-    }
+        argv.push_back("android.intent.action.MAIN");
+//        argv.push_back(intent.action());
+//    }
+
+    argv.push_back("-c");
+    argv.push_back("android.intent.category.LAUNCHER");
 
     if (intent.has_uri()) {
         argv.push_back("-d");
@@ -113,8 +117,10 @@ void AndroidApiSkeleton::launch_application(anbox::protobuf::bridge::LaunchAppli
         component += intent.component();
     }
 
-    if (!component.empty())
+    if (!component.empty()) {
+        argv.push_back("-n");
         argv.push_back(component);
+    }
 
     ALOGI("Launch am with the following arguments: ");
     std::string test;

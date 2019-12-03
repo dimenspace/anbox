@@ -604,6 +604,11 @@ EGLBoolean eglGetConfigAttrib(EGLDisplay dpy, EGLConfig config, EGLint attribute
     VALIDATE_DISPLAY_INIT(dpy, EGL_FALSE);
     VALIDATE_CONFIG(config, EGL_FALSE);
 
+    if  (attribute == EGL_COLOR_COMPONENT_TYPE_EXT) {
+        *value = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+        return EGL_TRUE;
+    }
+
     if (s_display.getConfigAttrib(config, attribute, value))
     {
         return EGL_TRUE;

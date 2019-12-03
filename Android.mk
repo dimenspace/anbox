@@ -67,10 +67,12 @@ LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_SHARED_LIBRARIES := \
     liblog \
     lib_renderControl_enc \
-    libOpenglSystemCommon
+    libOpenglSystemCommon \
+    libbase \
+    liblog
 LOCAL_SRC_FILES := \
     android/hwcomposer/hwcomposer.cpp
-LOCAL_MODULE := hwcomposer.anbox
+LOCAL_MODULE := hwcomposer.ranchu
 LOCAL_CFLAGS:= -DLOG_TAG=\"hwcomposer\"
 LOCAL_C_INCLUDES += \
     $(LOCAL_PATH)/android/opengl/host/include/libOpenglRender \
@@ -80,32 +82,19 @@ LOCAL_C_INCLUDES += \
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_SHARED_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := audio.primary.goldfish
-LOCAL_MODULE_RELATIVE_PATH := hw
-LOCAL_MODULE_TAGS := optional
-LOCAL_SHARED_LIBRARIES := libcutils liblog
-LOCAL_SRC_FILES := \
-    android/audio/audio_hw.cpp
-LOCAL_C_INCLUDES += \
-    $(LOCAL_PATH)/src
-LOCAL_SHARED_LIBRARIES += libdl
-LOCAL_CFLAGS := -Wno-unused-parameter
-
-include $(BUILD_SHARED_LIBRARY)
-
 # Include the Android.mk files below will override LOCAL_PATH so we
 # have to take a copy of it here.
 TMP_PATH := $(LOCAL_PATH)
 
 include $(TMP_PATH)/android/appmgr/Android.mk
-include $(TMP_PATH)/android/fingerprint/Android.mk
+include $(TMP_PATH)/android/audio/Android.mk
+#include $(TMP_PATH)/android/fingerprint/Android.mk
 include $(TMP_PATH)/android/power/Android.mk
 include $(TMP_PATH)/android/qemu-props/Android.mk
 include $(TMP_PATH)/android/qemud/Android.mk
 include $(TMP_PATH)/android/sensors/Android.mk
 include $(TMP_PATH)/android/opengl/Android.mk
-include $(TMP_PATH)/android/gps/Android.mk
-include $(TMP_PATH)/android/lights/Android.mk
-include $(TMP_PATH)/android/camera/Android.mk
-include $(TMP_PATH)/android/vibrator/Android.mk
+include device/generic/goldfish/gps/Android.mk
+#include $(TMP_PATH)/android/lights/Android.mk
+#include $(TMP_PATH)/android/camera/Android.mk
+#include $(TMP_PATH)/android/vibrator/Android.mk

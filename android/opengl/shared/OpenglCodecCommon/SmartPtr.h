@@ -16,7 +16,7 @@
 #ifndef __SMART_PTR_H
 #define __SMART_PTR_H
 
-#include <cutils/threads.h>
+#include <PortableMutex.h>
 #include <cutils/atomic.h>
 
 template <class T, bool threadSafe = false>

@@ -8,6 +8,8 @@ LOCAL_SRC_FILES := \
     QemuPipeStream.cpp \
     ThreadInfo.cpp
 
+LOCAL_C_INCLUDES += device/generic/goldfish/include
+
 $(call emugl-export,C_INCLUDES,$(LOCAL_PATH) bionic/libc/private)
 
 $(call emugl-end-module)

@@ -15,6 +15,10 @@ LOCAL_SRC_FILES := \
 
 LOCAL_SHARED_LIBRARIES += libdl
 
+LOCAL_C_INCLUDES += frameworks/native/libs/nativebase/include \
+                    frameworks/native/libs/nativewindow/include \
+                    frameworks/native/libs/arect/include
+
 # Used to access the Bionic private OpenGL TLS slot
 LOCAL_C_INCLUDES += bionic/libc/private
 

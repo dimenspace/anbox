@@ -21,12 +21,49 @@
 #include <unistd.h>
 #include <string.h>
 
+#define LISTEN_BACKLOG 4
+
 #ifndef _WIN32
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #else
 #include <ws2tcpip.h>
 #endif
+
+static int socket_loopback_server(int port, int type)
+{
+    struct sockaddr_in addr;
+    int s, n;
+
+    memset(&addr, 0, sizeof(addr));
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(port);
+    addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+
+    s = socket(AF_INET, type, 0);
+    if(s < 0) return -1;
+
+    n = 1;
+    setsockopt(s, SOL_SOCKET, SO_REUSEADDR, (const char *) &n, sizeof(n));
+
+    if(bind(s, (struct sockaddr *) &addr, sizeof(addr)) < 0) {
+        close(s);
+        return -1;
+    }
+
+    if (type == SOCK_STREAM) {
+        int ret;
+
+        ret = listen(s, LISTEN_BACKLOG);
+
+        if (ret < 0) {
+            close(s);
+            return -1;
+        }
+    }
+
+    return s;
+}
 
 TcpStream::TcpStream(size_t bufSize) :
     SocketStream(bufSize)
