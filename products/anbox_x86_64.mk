@@ -15,11 +15,11 @@
 #
 
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(LOCAL_PATH)/x86_64/device.mk)
+$(call inherit-product, $(LOCAL_PATH)/anbox_x86_64/device.mk)
 
 $(call inherit-product, $(LOCAL_PATH)/anbox.mk)
 
 PRODUCT_NAME := anbox_x86_64
-PRODUCT_DEVICE := x86_64
+PRODUCT_DEVICE := anbox_x86_64
 PRODUCT_BRAND := Android
 PRODUCT_MODEL := Anbox

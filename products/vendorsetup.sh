@@ -1,6 +1,0 @@
-add_lunch_combo anbox_x86_64-userdebug
-add_lunch_combo anbox_x86_64-user
-add_lunch_combo anbox_armv7a_neon-userdebug
-add_lunch_combo anbox_armv7a_neon-user
-add_lunch_combo anbox_arm64-userdebug
-add_lunch_combo anbox_arm64-user
