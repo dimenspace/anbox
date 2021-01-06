@@ -342,7 +342,7 @@ void LxcContainer::start(const Configuration &configuration) {
   DEBUG("Using rootfs path %s", rootfs_path);
   set_config_item(lxc_config_rootfs_path_key, rootfs_path);
 
-  set_config_item(lxc_config_log_level_key, "0");
+  set_config_item(lxc_config_log_level_key, "8");
   const auto log_path = SystemConfiguration::instance().log_dir();
   set_config_item(lxc_config_log_file_key, utils::string_format("%s/container.log", log_path).c_str());
 
@@ -398,6 +398,7 @@ void LxcContainer::start(const Configuration &configuration) {
   devices.insert({"/dev/urandom", {0666}});
   devices.insert({"/dev/zero", {0666}});
   devices.insert({"/dev/tun", {0660, "/dev/net/tun"}});
+
 
   // Remove all left over devices from last time first before
   // creating any new ones
