@@ -57,7 +57,7 @@ void invoke(Self* self, Bridge* rpc,
 
   try {
     std::unique_ptr<google::protobuf::Closure> callback(
-        google::protobuf::internal::NewPermanentCallback<
+        google::protobuf::NewPermanentCallback<
             Self, ::google::protobuf::uint32,
             typename result_ptr_t<ResultMessage>::type>(
             self, &Self::send_response, invocation.id(), &result_message));
