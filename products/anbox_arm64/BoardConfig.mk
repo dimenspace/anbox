@@ -3,6 +3,10 @@
 # Product-specific compile-time definitions.
 #
 
+BOARD_KERNEL_CMDLINE += printk.devkmsg=on
+BOARD_KERNEL_CMDLINE += log_buf_len=1M
+
+
 # The generic product target doesn't have any hardware-specific pieces.
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_KERNEL := true
@@ -51,3 +55,8 @@ BOARD_CACHEIMAGE_PARTITION_SIZE := 69206016
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_FLASH_BLOCK_SIZE := 512
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := true
+BOARD_USES_OEMIMAGE := oem
+BOARD_OEMIMAGE_FILE_SYSTEM_TYPE := ext4
+USE_XML_AUDIO_POLICY_CONF := 1
+
+BOARD_SEPOLICY_DIRS := vendor/anbox/sepolicy

@@ -132,6 +132,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 $(call inherit-product, frameworks/native/build/tablet-10in-xhdpi-2048-dalvik-heap.mk)
 
 PRODUCT_COPY_FILES += \
+        vendor/anbox/scripts/anbox-init.sh:root/anbox-init.sh \
 	vendor/anbox/products/anbox.xml:system/etc/permissions/anbox.xml
 
 DEVICE_MANIFEST_FILE := vendor/anbox/manifest.xml

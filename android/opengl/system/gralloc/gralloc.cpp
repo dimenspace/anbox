@@ -26,9 +26,10 @@
 #include "glUtils.h"
 #include <cutils/log.h>
 #include <cutils/properties.h>
+#include <stdlib.h>
 
 /* Set to 1 or 2 to enable debug traces */
-#define DEBUG  0
+#define DEBUG  2
 
 #if DEBUG >= 1
 #  define D(...)   ALOGD(__VA_ARGS__)
@@ -126,8 +127,10 @@ static int gralloc_alloc(alloc_device_t* dev,
                          int w, int h, int format, int usage,
                          buffer_handle_t* pHandle, int* pStride)
 {
+    ALOGE("gralloc_alloc called with w=%d h=%d usage=0x%x\n", w, h, usage);
     D("gralloc_alloc w=%d h=%d usage=0x%x\n", w, h, usage);
 
+//    abort();
     gralloc_device_t *grdev = (gralloc_device_t *)dev;
     if (!grdev || !pHandle || !pStride) {
         ALOGE("gralloc_alloc: Bad inputs (grdev: %p, pHandle: %p, pStride: %p",
@@ -271,6 +274,9 @@ static int gralloc_alloc(alloc_device_t* dev,
         }
     }
 
+    ALOGE("gralloc_alloc format=%d, ashmem_size=%d, stride=%d, tid %d\n", format,
+            ashmem_size, stride, gettid());
+
     D("gralloc_alloc format=%d, ashmem_size=%d, stride=%d, tid %d\n", format,
             ashmem_size, stride, gettid());
 
@@ -290,6 +296,7 @@ static int gralloc_alloc(alloc_device_t* dev,
         }
     }
 
+    ALOGE("start new cb_handle_t\n");
     cb_handle_t *cb = new cb_handle_t(fd, ashmem_size, usage,
                                       w, h, frameworkFormat, format,
                                       glFormat, glType);
@@ -348,6 +355,7 @@ static int gralloc_alloc(alloc_device_t* dev,
     pthread_mutex_unlock(&grdev->lock);
 
     *pHandle = cb;
+    ALOGE("end pHandle,cb = %d\n",cb);
     if (frameworkFormat == HAL_PIXEL_FORMAT_YCbCr_420_888) {
         *pStride = 0;
     } else {

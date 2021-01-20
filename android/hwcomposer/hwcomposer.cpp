@@ -31,6 +31,7 @@
 #include "gralloc_cb.h"
 
 #include <android-base/properties.h>
+#include <stdlib.h>
 
 #define DEFINE_HOST_CONNECTION() \
     HostConnection *hostCon = HostConnection::get(); \
@@ -90,7 +91,9 @@ static void dump_layer(hwc_layer_1_t const* l) {
 static int hwc_prepare(hwc_composer_device_1_t* dev, size_t numDisplays,
                        hwc_display_contents_1_t** displays) {
     auto context = reinterpret_cast<HwcContext*>(dev);
-
+   
+    ALOGD("---begin hwc_prepare----");
+    //abort();
     if (displays == NULL || displays[0] == NULL)
         return -EINVAL;
 
@@ -136,6 +139,7 @@ static int hwc_prepare(hwc_composer_device_1_t* dev, size_t numDisplays,
         context->num_overlays = i - 1;
         context->framebuffer_visible = visible;
     }
+    ALOGV("---- hwc_prepare  finished--- ");
 
     return 0;
 }
@@ -177,6 +181,7 @@ static int hwc_set(hwc_composer_device_1_t* dev, size_t numDisplays,
                    hwc_display_contents_1_t** displays) {
     auto context = reinterpret_cast<HwcContext*>(dev);
 
+    ALOGD("\t MyTag hwc_set 3");
     if (displays == NULL || displays[0] == NULL)
         return -EFAULT;
 
@@ -184,14 +189,17 @@ static int hwc_set(hwc_composer_device_1_t* dev, size_t numDisplays,
 
     for (size_t i = 0 ; i < displays[0]->numHwLayers ; i++) {
         const auto layer = &displays[0]->hwLayers[i];
+        ALOGD("\t hhhh the layer:%p  ", layer);
 
         if (layer->flags & HWC_SKIP_LAYER ||
             layer->flags & HWC_IS_CURSOR_LAYER)
             continue;
 
-#if 0
+//#if 0
         dump_layer(layer);
-#endif
+//#endif
+	//add my test log
+	ALOGD("\t hhhh the handle:%p  ", layer->handle);
 
         // FIXME this is just dirty ... but layer->handle is a const native_handle_t and canBePosted
         // can't be called with a const.
